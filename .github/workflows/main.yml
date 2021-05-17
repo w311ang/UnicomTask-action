@@ -38,6 +38,7 @@ jobs:
           echo "
           def sendQmail(email):
             try:
+              import pytools
               #要发送邮件内容
               content = readFile('./log.txt')
               content=content.replace('\n\n','')
@@ -49,7 +50,7 @@ jobs:
             except Exception as e:
               print('邮件推送异常，原因为: ' + str(e))
               print(traceback.format_exc())" >> notify.py
-              sed -i 's/,datetime/,datetime,pytools/g' index.py
+              sed -i 's/notify.sendEmail/notify.sendQmail/g' index.py
 
       - name: Install dependencies
         run: |
