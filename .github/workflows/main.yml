@@ -40,7 +40,7 @@ jobs:
             try:
               import pytools
               #要发送邮件内容
-              content = readFile('./log.txt')
+              content = readFile('./tmp/log.txt')
               content=content.replace('\n\n','')
               #接收方邮箱
               receivers = email
