@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo -e '\nblxml' >> requirements.txt
+          echo -e '\nlxml' >> requirements.txt
           pip install -r requirements.txt
 
       - name: Build and publish
