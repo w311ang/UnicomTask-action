@@ -77,7 +77,7 @@ jobs:
           sudo systemctl start shadowsocks
           sleep 3s
           systemctl status --no-pager shadowsocks
-          sudo sh -c "echo 'socks5 127.0.0.1 1080' >> /etc/proxychains.conf"      
+          sudo sh -c "echo -e '\nsocks5 127.0.0.1 1080' >> /etc/proxychains.conf"      
 
       - name: Build and publish
         env:
