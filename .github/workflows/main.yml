@@ -57,10 +57,33 @@ jobs:
           echo -e '\nlxml\nPyCryptodome' >> requirements.txt
           pip install -r requirements.txt
 
+      - name: Set proxy
+        env:
+          config: ${{ secrets.config }}
+        run: |
+          sudo apt-get install shadowsocks-libev simple-obfs
+          sudo -E sh -c 'echo $config|base64 -d > /etc/shadowsocks-libev/config.json'
+          sudo sh -c 'echo "\
+          [Unit]
+          Description=Shadowsocks
+          After=network.target
+          [Service]
+          ExecStart=ss-local -c /etc/shadowsocks-libev/config.json
+          Rnestart=on-abort
+          [Install]
+          WantedBy=multi-user.target\
+          ">/etc/systemd/system/shadowsocks.service'
+          sudo systemctl daemon-reload
+          sudo systemctl start shadowsocks
+          sleep 3s
+          systemctl status --no-pager shadowsocks
+          sudo apt-get install proxychains-ng
+          sudo sh -c "echo 'socks5 127.0.0.1 1080' >> /etc/proxychains.conf"      
+
       - name: Build and publish
         env:
           USERS_COVER: ${{ secrets.USERS_COVER }}
           jmail: ${{ secrets.jmail }}
         run: |
           echo "$USERS_COVER"|base64 -d > ./config.json
-          python index.py
+          proxychains python index.py
