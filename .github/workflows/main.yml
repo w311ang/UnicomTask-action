@@ -21,7 +21,7 @@ jobs:
 
       - name: Unzip latest release
         run: |
-          curl -O https://github.com/srcrs/UnicomTask/releases/latest/download/unicom-task_scf.zip
+          wget https://github.com/srcrs/UnicomTask/releases/latest/download/unicom-task_scf.zip
           unzip unicom-task_scf.zip
 
       - name: Edit
