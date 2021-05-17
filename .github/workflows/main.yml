@@ -31,14 +31,34 @@ jobs:
           find . -type f -exec sed -i.bak "s/..\/..\/tmp\/log.txt/.\/tmp\/log.txt/g" {} \;
           sed -i 's/main("","")/main_handler("","")/g' index.py
 
+      - name: Add QMail
+        run: |
+          curl -O https://raw.githubusercontent.com/w311ang/pytools/main/pytools.py
+          curl -O https://raw.githubusercontent.com/w311ang/pytools/main/aes.py
+          echo -e "\n\
+          def sendQmail(email):
+            try:
+              #要发送邮件内容
+              content = readFile('./log.txt')
+              content=content.replace('\n\n','')
+              #接收方邮箱
+              receivers = email
+              #邮件主题
+              subject = 'UnicomTask每日报表'
+              pytools.jmail('UnicomTask',subject,content)
+            except Exception as e:
+              print('邮件推送异常，原因为: ' + str(e))
+              print(traceback.format_exc())" >> notify.py
+
       - name: Install dependencies
         run: |
-          echo -e '\nlxml' >> requirements.txt
+          echo -e '\nlxml\nPyCryptodome' >> requirements.txt
           pip install -r requirements.txt
 
       - name: Build and publish
         env:
           USERS_COVER: ${{ secrets.USERS_COVER }}
+          jmail: ${{ secrets.jmail }}
         run: |
           echo "$USERS_COVER"|base64 -d > ./config.json
           python index.py
