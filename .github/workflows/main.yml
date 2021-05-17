@@ -28,7 +28,7 @@ jobs:
         run: |
           rm -R -- */
           mkdir tmp
-          sed -i 's/..\/..\/tmp\/log.txt/.\/tmp\/log.txt/g' *
+          find . -type f -exec sed -i.bak "s/..\/..\/tmp\/log.txt/.\/tmp\/log.txt/g" {} \;
 
       - name: Build and publish
         env:
