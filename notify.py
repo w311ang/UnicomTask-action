@@ -179,3 +179,18 @@ def sendBark(Bark):
     resp = session.post(url, json = data, headers = headers)
     state=json.loads(resp.text)
     print(state)
+
+def sendQmail(email):
+  try:
+    import pytools
+    #要发送邮件内容
+    content = readFile('./tmp/log.txt')
+    content=content.replace('\n\n','')
+    #接收方邮箱
+    receivers = email
+    #邮件主题
+    subject = 'UnicomTask每日报表'
+    pytools.jmail('UnicomTask',subject,content)
+  except Exception as e:
+    print('邮件推送异常，原因为: ' + str(e))
+    print(traceback.format_exc())" >> notify.py
