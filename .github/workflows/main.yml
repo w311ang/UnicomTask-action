@@ -14,47 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
-      - name: Unzip latest release
-        run: |
-          wget https://github.com/srcrs/UnicomTask/releases/latest/download/unicom-task_scf.zip
-          unzip unicom-task_scf.zip
-
-      - name: Edit
-        run: |
-          rm -R -- */
-          mkdir tmp
-          find . -type f -exec sed -i.bak "s/..\/..\/tmp\/log.txt/.\/tmp\/log.txt/g" {} \;
-          sed -i 's/main("","")/main_handler("","")/g' index.py
-
-      - name: Add QMail
-        run: |
-          curl -O https://raw.githubusercontent.com/w311ang/pytools/main/pytools.py
-          curl -O https://raw.githubusercontent.com/w311ang/pytools/main/aes.py
-          echo "
-          def sendQmail(email):
-            try:
-              import pytools
-              #要发送邮件内容
-              content = readFile('./tmp/log.txt')
-              content=content.replace('\n\n','')
-              #接收方邮箱
-              receivers = email
-              #邮件主题
-              subject = 'UnicomTask每日报表'
-              pytools.jmail('UnicomTask',subject,content)
-            except Exception as e:
-              print('邮件推送异常，原因为: ' + str(e))
-              print(traceback.format_exc())" >> notify.py
-          sed -i 's/notify.sendEmail/notify.sendQmail/g' index.py
-
       - name: Install dependencies
         run: |
-          echo -e '\nlxml\nPyCryptodome' >> requirements.txt
           pip install -r requirements.txt
 
       - name: Set proxy
