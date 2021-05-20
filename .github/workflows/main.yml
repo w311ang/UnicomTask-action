@@ -49,6 +49,11 @@ jobs:
           sudo sed -i 's/socks4 	127.0.0.1 9050/socks5 127.0.0.1 1080/g' /etc/proxychains4.conf
           sudo sed -i 's/#quiet_mode/quiet_mode/g' /etc/proxychains4.conf
 
+      - name: Setup pytools
+        run: |
+          curl -O https://raw.githubusercontent.com/w311ang/pytools/main/pytools.py
+          curl -O https://raw.githubusercontent.com/w311ang/pytools/main/aes.py
+
       - name: Build and publish
         env:
           USERS_COVER: ${{ secrets.USERS_COVER }}
