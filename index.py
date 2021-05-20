@@ -427,7 +427,7 @@ def main_handler(event, context):
             if ('autoKingCardType' in user) :
                 autoKingCardWelfare(user['autoKingCardType'])
         if ('email' in user) :
-            notify.sendEmail(user['email'])
+            notify.sendQmail(user['email'])
         if ('dingtalkWebhook' in user) :
             notify.sendDing(user['dingtalkWebhook'])
         if ('telegramBot' in user) :
