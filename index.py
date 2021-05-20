@@ -6,6 +6,7 @@
 import requests,json,time,re,login,logging,traceback,os,random,notify,datetime
 from lxml.html import fromstring
 import pytz
+import pytools
 
 #用户登录全局变量
 client = None
